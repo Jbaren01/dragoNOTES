@@ -82,8 +82,8 @@ app.get('/login/github/callback', async (req, res) => {
   const githubData = await getGithubUser(token);
   if (githubData) {
     console.log('this is the githubdata:', githubData);
-    // req.session.githubId = githubData.id;
-    // req.session.token = token;
+    req.session.githubId = githubData.id;
+    req.session.token = token;
     res.redirect(`/admin?code=${code}`);
   } else {
     console.log('Error');
@@ -95,11 +95,11 @@ app.get('/login/github/callback', async (req, res) => {
 // otherwise give them a link that redirects them to the login
 
 app.get('/admin', (req, res) => {
-  // if (req.session.githubId === 66573803) {
-  res.send(`Hey Jon <pre>${JSON.stringify(req.session)}`);
-  // } else {
-  // res.send('Not authorized, <a href="/login/github">login</a>');
-  // }
+  if (req.session.githubId === 66573803) {
+    res.send(`Hey Jon <pre>${JSON.stringify(req.session)}`);
+  } else {
+    res.send('Not authorized, <a href="/login/github">login</a>');
+  }
 });
 
 // LOGOUT: upon logging out, cookie is set to null, session is terminated
